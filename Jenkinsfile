@@ -15,19 +15,31 @@ pipeline {
                '''
             }
         }
-        stage('Test') {
-            steps {
+           post {
+                success {
+                    archiveArtifacts artifacts: 'build/simple-java-maven-app/target/*.jar', fingerprint: true
+                }
+	   
+           stage('Test') {
+            steps 
                sh "./jenkins/test/mvn.sh mvn test"
             }
         }
+            post {
+                always {
+                    junit 'build/simple-java-maven-app/target/surefire-reports/*.xml'
+                }
+            }
 
         stage('Push') {
+            
             steps {
                sh "./jenkins/push/push.sh"
             }
         }
 
         stage('Deploy') {
+            
             steps {
                sh "./jenkins/deploy/deploy.sh"
             }
