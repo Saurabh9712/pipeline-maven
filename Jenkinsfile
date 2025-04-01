@@ -18,7 +18,7 @@ pipeline {
         }
            post {
                 success {
-                    archiveArtifacts artifacts: 'build/simple-java-maven-app/target/*.jar', fingerprint: true
+                 archiveArtifacts artifacts: 'java-app/target/*.jar', fingerprint: true
                 }
            }
 
