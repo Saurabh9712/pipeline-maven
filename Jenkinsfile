@@ -7,11 +7,12 @@ pipeline {
 
     stages {
         stage('Build') {
+            
             steps {
                sh '''
                 ./jenkins/build/mvn.sh mvn -B -DskipTests clean package
-                 ./jenkins/build/build.sh 
-               
+                 ./jenkins/build/build.sh
+
                '''
             }
         }
@@ -19,9 +20,11 @@ pipeline {
                 success {
                     archiveArtifacts artifacts: 'build/simple-java-maven-app/target/*.jar', fingerprint: true
                 }
-	   
+           }
+
            stage('Test') {
-            steps 
+            
+            steps {
                sh "./jenkins/test/mvn.sh mvn test"
             }
         }
@@ -32,18 +35,19 @@ pipeline {
             }
 
         stage('Push') {
-            
+
             steps {
                sh "./jenkins/push/push.sh"
             }
         }
 
         stage('Deploy') {
-            
+
             steps {
                sh "./jenkins/deploy/deploy.sh"
             }
         }
     }
-       
+
 }
+
